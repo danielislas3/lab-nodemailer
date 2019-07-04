@@ -74,6 +74,20 @@ router.get("/logout", (req, res) => {
   res.redirect("/");
 });
 
-
+router.get("/confirm/:confirmationCode", (req, res) => {
+  const {confirmationCode} = req.params;
+  //true es para que nos regrese el ya editado
+  User.findOneAndUpdate({ confirmationCode }, { status: "Active" }, { new: true })
+  .then(user => {
+    
+    res.render("auth/confirmation", {message: "Cuenta confirmada"});
+    //por que no funciona el alert?
+    alert("Cuenta confirmada \n Inicia sesion")
+  })
+  .catch(err => {
+    console.log(err);
+    res.render("auth/login", { message: "Algo salio mal" });
+  });
+})
 
 module.exports = router;
